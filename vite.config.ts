@@ -2,17 +2,27 @@ import { ConfigEnv, defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import VueSetupExtend from 'vite-plugin-vue-setup-extend';
 import {resolve } from 'path'
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
 export default defineConfig(({mode}: ConfigEnv) => {
   const env = loadEnv(mode, resolve(__dirname, 'vite_env'))
-  console.log(env)
-
+  process.env.NODE_ENV = env.VITE_NODE_ENV
   return {
     base: './',
     envDir: './vite_env',
     envPrefix: ['VITE_'],
-    plugins: [vue(), VueSetupExtend()],
+    plugins: [
+      vue(), VueSetupExtend(),
+      AutoImport({
+        resolvers: [ElementPlusResolver()],
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()],
+      })
+    ],
     resolve: {
       alias: [{ find: '@', replacement: resolve(__dirname, 'src')}]
     },

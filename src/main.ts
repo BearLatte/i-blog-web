@@ -1,5 +1,16 @@
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
+import router from './router'
+import request from './utils/request'
+import message from './utils/Message'
 
-createApp(App).mount('#app')
+const env = import.meta.env
+console.log(env)
+
+const app = createApp(App)
+app.use(router)
+// axios封装，挂载到全局实例
+app.config.globalProperties.$request = request
+app.config.globalProperties.$customMsg = message
+app.mount('#app')
