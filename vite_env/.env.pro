@@ -1,0 +1,6 @@
+# .env.production
+# 透传客户端参数
+VITE_NODE_ENV = release
+VITE_HOST     = 127.0.0.1
+VITE_PORT     = 3000
+VITE_PROXY_HOST = https://interface.i-blog.online
