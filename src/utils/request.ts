@@ -22,13 +22,14 @@ interface RequestConfig {
 }
 
 
-const request = async (config: RequestConfig) => {
-  let { url, method, dataType, params, showLoading } = config
+const request = (config: RequestConfig) => {
+  let { method, dataType, params, showLoading } = config
+  const url = config.url
   method = method ? method : 'GET'
   dataType = dataType ? dataType : ContentType.form
   showLoading = showLoading ? showLoading : true
   if (dataType == ContentType.file) {
-    let param = new FormData()
+    const param = new FormData()
     for (const key in params) {
       param.append(key, params[key])
     }
@@ -36,7 +37,7 @@ const request = async (config: RequestConfig) => {
   }
 
   const instance = axios.create({
-    baseURL: '',
+    baseURL: '/api',
     timeout: 10 * 1000,
     headers: {
       'Content-Type': dataType,
@@ -71,7 +72,7 @@ const request = async (config: RequestConfig) => {
     if (showLoading && loading) {
       loading.close()
     }
-    let responseData = response.data
+    const responseData = response.data
     // 处理返回信息
     if (responseData.status != 0) {
       if (config.errorCallback) {

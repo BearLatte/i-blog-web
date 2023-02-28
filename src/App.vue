@@ -1,6 +1,8 @@
 <template>
-  <RouterView />
+  <router-view />
 </template>
 <script setup lang="ts"></script>
 
-<style scoped></style>
+<style lang="less">
+@import url('@/assets/style/main.less');
+</style>
