@@ -1,49 +1,48 @@
 <template>
-  <div class="container">
-    <div class="container-header">
-      <div class="nav">
-        <h1 class="nav-logo">
-          <router-link to="/" title="i-Blog，让你爱上书写">
-            i-Blog
-          </router-link>
-        </h1>
-        <div class="item-container">
-          <router-link to="/" class="nav-item">博客</router-link>
-          <router-link to="/" class="nav-item">分类专栏</router-link>
-          <router-link to="/" class="nav-item">专题</router-link>
-          <router-link to="/" class="nav-item">成员</router-link>
-        </div>
-      </div>
+  <div class="container-header">
+    <div class="nav">
+      <h1 class="nav-logo">
+        <router-link to="/" title="i-Blog，让你爱上书写"> i-Blog </router-link>
+      </h1>
+      <router-link
+        :class="['nav-item', menu.path == activePath ? 'active' : '']"
+        v-for="(menu, index) in menus"
+        :key="index"
+        :to="menu.path"
+      >
+        {{ menu.name }}
+      </router-link>
     </div>
-    <div class="container-body">sdasfdasfasdfasddfasdfasdfasdfsdafsda</div>
-    <div class="container-footer">
-      <p>
-        ©2023-{{ new Date().getFullYear() }} {{ systemInfo.icpDomain }} All
-        rights reserved.
-        {{ systemInfo.policeProvince }}
-        ICP备
-        {{ systemInfo.icpNo }}
-      </p>
-      <p>{{ systemInfo.policeProvince }}公网安备</p>
-    </div>
+  </div>
+  <div class="container-body">
+    <router-view />
+  </div>
+  <div class="container-footer">
+    <p>
+      ©2023-{{ new Date().getFullYear() }} {{ systemInfo.icpDomain }} All rights
+      reserved.
+      {{ systemInfo.policeProvince }}
+      ICP备
+      {{ systemInfo.icpNo }}
+    </p>
+    <p>{{ systemInfo.policeProvince }}公网安备</p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { SystemSettings } from '@/types/DataInterfaces'
+import { useRouter } from 'vue-router'
 import {
   ComponentInternalInstance,
   getCurrentInstance,
-  onMounted,
   reactive,
-  toRefs
+  ref,
+  watch
 } from 'vue'
 
 const { proxy } = <ComponentInternalInstance>getCurrentInstance()
-const data = reactive({
-  systemInfo: {} as SystemSettings
-})
-const { systemInfo } = toRefs(data)
+const router = useRouter()
+const systemInfo = reactive<SystemSettings>(<SystemSettings>{})
 const api = {
   getSysInfo: '/front/getSysInfo'
 }
@@ -53,31 +52,56 @@ const initRemoteData = async () => {
     url: api.getSysInfo
   })
   if (!result) return
-  systemInfo.value = result.data
+  Object.assign(systemInfo, result.data)
 }
 
-// initRemoteData()
+initRemoteData()
 
-onMounted(() => {
-  initRemoteData()
-})
+// 路由菜单
+const menus = ref<{ name: string; path: string }[]>([
+  {
+    name: '博客',
+    path: '/'
+  },
+  {
+    name: '分区专栏',
+    path: '/categories'
+  },
+  {
+    name: '专题',
+    path: '/specials'
+  },
+  {
+    name: '成员',
+    path: '/users'
+  }
+])
+
+const activePath = ref<string | undefined>(undefined)
+watch(
+  () => router,
+  (currentRouter) => {
+    activePath.value = currentRouter.currentRoute.value.meta
+      .activePath as string
+  },
+  { immediate: true, deep: true }
+)
 </script>
 
 <style lang="less" scoped>
 .container-header {
   position: fixed;
-  height: 80px;
-  box-shadow: 0 2px 6px 0 #222;
+  top: 0;
+  z-index: 999;
   width: 100%;
-
+  height: 80px;
+  background-color: #292d3e;
+  box-shadow: 0 2px 6px 0 #222;
   .nav {
-    display: flex;
-    position: relative;
+    margin: 0 auto;
     width: @content-width;
     min-width: @content-min-width;
-    height: 80px;
-    margin: 0 auto;
-
+    display: flex;
     .nav-logo {
       margin-left: 10px;
       width: 130px;
@@ -91,39 +115,35 @@ onMounted(() => {
         background-size: cover;
       }
     }
-
-    .item-container {
-      position: absolute;
-      display: flex;
-      bottom: 10px;
-      left: 140px;
+    .nav-item {
+      margin-top: 30px;
       height: 40px;
-      .nav-item {
-        height: 40px;
-        margin-left: 20px;
-        padding: 0 40px;
-        font-size: @theme-top-title-size;
-        line-height: 40px;
-      }
-      .active {
-        color: @theme-high-color;
-      }
+      margin-left: 20px;
+      padding: 0 40px;
+      line-height: 40px;
+      font-size: @theme-top-title-size;
+    }
+
+    .active {
+      color: @theme-high-color;
     }
   }
 }
-
 .container-body {
-  padding-top: 80px;
+  min-height: calc(100vh - 60px);
+  margin: 0px auto;
   width: @content-width;
   min-width: @content-min-width;
-  margin: 0 auto;
+  padding-top: 80px;
+  padding-bottom: 10px;
 }
-
 .container-footer {
+  height: 60px;
   font-size: 12px;
   text-align: center;
   p {
     height: 20px;
+    line-height: 20px;
   }
 }
 </style>

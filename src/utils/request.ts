@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ElLoading } from 'element-plus'
+// import { ElLoading } from 'element-plus'
 import message from './Message.js'
 
 enum ContentType {
@@ -13,14 +13,13 @@ enum ContentType {
 
 // 此处声明成接口
 interface RequestConfig {
-  url: string,
-  method?: string,
-  params?: { [key: string]: any },
-  dataType?: ContentType,
-  showLoading?: boolean,
+  url: string
+  method?: string
+  params?: { [key: string]: any }
+  dataType?: ContentType
+  showLoading?: boolean
   errorCallback?: () => void
 }
-
 
 const request = (config: RequestConfig) => {
   let { method, dataType, params, showLoading } = config
@@ -45,7 +44,7 @@ const request = (config: RequestConfig) => {
     }
   })
 
-  let loading : any  = null
+  let loading: any = null
   // 请求前拦截
   instance.interceptors.request.use(
     (config) => {
@@ -58,7 +57,7 @@ const request = (config: RequestConfig) => {
       }
       return config
     },
-    () => { 
+    () => {
       if (showLoading && loading) {
         loading.close()
         message.error('发送请求失败')
@@ -68,37 +67,37 @@ const request = (config: RequestConfig) => {
   )
 
   // 请求后拦截
-  instance.interceptors.response.use((response) => {
-    if (showLoading && loading) {
-      loading.close()
-    }
-    const responseData = response.data
-    // 处理返回信息
-    if (responseData.status != 0) {
-      if (config.errorCallback) {
-        config.errorCallback()
+  instance.interceptors.response.use(
+    (response) => {
+      if (showLoading && loading) {
+        loading.close()
       }
-      return Promise.reject(responseData.message)
-    }
+      const responseData = response.data
+      // 处理返回信息
+      if (responseData.status != 0) {
+        if (config.errorCallback) {
+          config.errorCallback()
+        }
+        return Promise.reject(responseData.message)
+      }
 
-    return responseData
-  }, (error) => { 
-    console.log(error)
-    if (showLoading && loading) {
-      loading.close()
-      return Promise.reject('网络异常')
+      return responseData
+    },
+    (error) => {
+      console.log(error)
+      if (showLoading && loading) {
+        loading.close()
+        return Promise.reject('网络异常')
+      }
     }
-  })
+  )
 
   // 请求方法处理
   if (method.toLowerCase() == 'post') {
-    return instance.post(url, params).catch(
-      (error) => {
-        message.error(error)
-        return null
-      }
-    )
-    
+    return instance.post(url, params).catch((error) => {
+      message.error(error)
+      return null
+    })
   } else if (method.toLocaleLowerCase() == 'delete') {
     return instance.delete(url, params).catch((error) => {
       message.error(error)
@@ -115,10 +114,14 @@ const request = (config: RequestConfig) => {
       return null
     })
   } else {
-    return instance.get(url, params).catch((error) => {
-      message.error(error)
-      return null
-    })
+    return instance
+      .get(url, {
+        params: params
+      })
+      .catch((error) => {
+        message.error(error)
+        return null
+      })
   }
 }
 
