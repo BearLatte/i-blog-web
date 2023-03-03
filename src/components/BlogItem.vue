@@ -96,6 +96,12 @@ const props = defineProps({
     font-weight: 700;
     height: 20px;
     line-height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+
     a {
       font-size: @theme-content-title-size;
       color: @theme-high-color;

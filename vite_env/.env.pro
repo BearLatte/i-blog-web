@@ -1,6 +1,7 @@
 # .env.production
 # 透传客户端参数
 VITE_NODE_ENV = production
+VITE_BASE     = '/'
 VITE_HOST     = 127.0.0.1
 VITE_PORT     = 3000
 VITE_IS_SECURE = true

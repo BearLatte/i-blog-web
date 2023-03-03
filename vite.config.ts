@@ -12,7 +12,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
   process.env.NODE_ENV = env.VITE_NODE_ENV
   console.log(env)
   return {
-    base: './',
+    base: env.VITE_BASE ,
     envDir: './vite_env',
     envPrefix: ['VITE_'],
     plugins: [
