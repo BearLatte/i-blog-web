@@ -5,7 +5,12 @@
       <img src="../assets/default_cover.png" alt="" />
     </div>
     <h4 class="name">
-      <router-link to="/">{{ name }}</router-link>
+      <router-link :to="'/categories/' + categoryId" v-if="type == 'category'">
+        {{ name }}
+      </router-link>
+      <router-link :to="'/specials/' + categoryId" v-if="type == 'special'">
+        {{ name }}
+      </router-link>
     </h4>
     <div class="count">{{ count }}篇</div>
   </div>
@@ -15,12 +20,14 @@
 import { getCurrentInstance, ComponentInternalInstance } from 'vue'
 const { proxy } = <ComponentInternalInstance>getCurrentInstance()
 const props = defineProps({
+  categoryId: Number,
   cover: {
     type: String,
     default: undefined
   },
   name: String,
-  count: Number
+  count: Number,
+  type: String
 })
 </script>
 <style lang="less" scoped>

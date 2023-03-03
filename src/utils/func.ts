@@ -15,6 +15,11 @@ const func = {
       date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
 
     return `${year}-${month}-${day} ${hour}:${minutes}:${seconds}`
+  },
+  triggerResize: () => {
+    let e = document.createEvent('Event')
+    e.initEvent('resize', true, true)
+    window.dispatchEvent(e)
   }
 }
 

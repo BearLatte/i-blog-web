@@ -6,16 +6,20 @@
     </div>
     <div class="content">
       <h4 class="title">
-        <router-link to="/">{{ title }}</router-link>
+        <router-link :to="'/blog/' + blogId">{{ title }}</router-link>
       </h4>
       <p class="summary">{{ summary }}</p>
       <div class="info">
         <span>{{ proxy?.$func.dateformatter(createdAt) }}</span>
         <span>
-          作者：<router-link to="/">{{ nickName }}</router-link>
+          作者：<router-link :to="'/users#' + userId">
+            {{ nickName }}
+          </router-link>
         </span>
         <span>
-          分类专栏：<router-link to="/">{{ categoryName }}</router-link>
+          分类专栏：<router-link :to="'/categories/' + categoryId">{{
+            categoryName
+          }}</router-link>
         </span>
       </div>
     </div>
@@ -49,6 +53,18 @@ const props = defineProps({
   },
   categoryName: {
     type: String,
+    default: undefined
+  },
+  blogId: {
+    type: Number,
+    default: undefined
+  },
+  userId: {
+    type: Number,
+    default: undefined
+  },
+  categoryId: {
+    type: Number,
     default: undefined
   }
 })

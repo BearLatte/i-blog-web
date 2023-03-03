@@ -6,6 +6,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     BlogItem: import('@/components/BlogItem.vue')
     CategoryItem: import('@/components/CategoryItem.vue')
+    CategoryItem4List: import('@/components/Category4List.vue')
     UserItem: import('@/components/UserItem.vue')
   }
 }

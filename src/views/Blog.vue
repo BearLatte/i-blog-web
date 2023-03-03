@@ -2,7 +2,8 @@
   <div class="container">
     <div class="left">
       <div class="blog-list">
-        <div v-for="item in blogPageInfo.list" :key="item.id">
+        <div v-if="blogPageInfo.list.length == 0" class="empty-data"></div>
+        <div v-for="item in blogPageInfo.list" :key="item.id" v-else>
           <BlogItem
             :title="item.title"
             :cover="item.cover"
@@ -10,6 +11,9 @@
             :createdAt="item.createdAt"
             :nickName="item.nickName"
             :categoryName="item.categoryName"
+            :blogId="item.id"
+            :userId="item.userId"
+            :categoryId="item.categoryId"
           />
         </div>
       </div>
@@ -34,7 +38,7 @@
       <div class="category-list">
         <div class="part-title">
           <span>分类专栏</span>
-          <router-link to="">更多&gt;&gt;</router-link>
+          <router-link to="/categories">更多&gt;&gt;</router-link>
         </div>
         <ul>
           <li v-for="item in categoryList" :key="item.id">
@@ -42,15 +46,17 @@
               :cover="item.cover"
               :name="item.categoryName"
               :count="item.blogCount"
+              :categoryId="item.id"
+              :type="'category'"
             >
             </CategoryItem>
           </li>
         </ul>
       </div>
-      <div class="category-list">
+      <div class="user-list">
         <div class="part-title">
           <span>博客成员</span>
-          <router-link to="">更多&gt;&gt;</router-link>
+          <router-link to="/users">更多&gt;&gt;</router-link>
         </div>
         <ul>
           <li v-for="user in userList" :key="user.id">
@@ -59,6 +65,7 @@
               :nickName="user.nickName"
               :blogCount="user.blogCount"
               :profession="user.profession"
+              :userId="user.id"
             >
             </UserItem>
           </li>
@@ -67,7 +74,7 @@
       <div class="special-list">
         <div class="part-title">
           <span>专题</span>
-          <router-link to="">更多&gt;&gt;</router-link>
+          <router-link to="/specials">更多&gt;&gt;</router-link>
         </div>
         <ul>
           <li v-for="item in specialList" :key="item.id">
@@ -75,6 +82,8 @@
               :cover="item.cover"
               :name="item.categoryName"
               :count="item.blogCount"
+              :type="'special'"
+              :categoryId="item.id"
             >
             </CategoryItem>
           </li>
@@ -95,7 +104,8 @@ import {
   getCurrentInstance,
   ref,
   ComponentInternalInstance,
-  reactive
+  reactive,
+  onUnmounted
 } from 'vue'
 
 const { proxy } = <ComponentInternalInstance>getCurrentInstance()
@@ -108,7 +118,10 @@ const api = {
 }
 
 // 博客列表
-const blogPageInfo = reactive(<DatasourceWithPages<BlogObj>>{})
+const blogPageInfo = reactive(<DatasourceWithPages<BlogObj>>{
+  pageSize: 7,
+  list: []
+})
 
 const getBlogList = async () => {
   const { pageNo, pageSize } = blogPageInfo
@@ -134,7 +147,7 @@ const getCategoryList = async () => {
   const result = await proxy?.$request({
     url: api.getCategories,
     method: 'GET',
-    params: { pageSize: 5 }
+    params: { pageSize: 3 }
   })
   categoryList.value = result.data
 }
@@ -146,7 +159,7 @@ const getSpecialList = async () => {
   const result = await proxy?.$request({
     url: api.getSpectials,
     method: 'GET',
-    params: { pageSize: 5 }
+    params: { pageSize: 3 }
   })
   console.log(result)
   specialList.value = result.data.list
@@ -160,50 +173,25 @@ const getUserList = async () => {
   const result = await proxy?.$request({
     url: api.getUserList,
     method: 'GET',
-    params: { pageSize: 5 }
+    params: { pageSize: 3 }
   })
   if (!result) return
   userList.value = result.data
 }
 getUserList()
+
+onUnmounted(() => {
+  console.log('blogvue,,,,onUnmounted页面卸载了')
+})
 </script>
 
 <style lang="less" scoped>
 .container {
-  margin-top: 10px;
-  display: flex;
   .left {
-    flex: 1;
-    padding: 15px;
-    background-color: @theme-fornt-color;
     .pagination {
       margin-top: 5px;
       :deep(ul > li.is-active) {
         background-color: @theme-high-color;
-      }
-    }
-  }
-
-  .right {
-    padding: 15px;
-    width: 300px;
-    margin-left: 10px;
-    background-color: @theme-fornt-color;
-
-    .category-list {
-      margin-bottom: 20px;
-    }
-    .part-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 5px;
-      margin-bottom: 5px;
-      border-bottom: 1px solid @theme-border-color;
-      font-size: @theme-content-title-size;
-      color: @theme-high-color;
-      a {
-        font-size: @small-font-size;
       }
     }
   }

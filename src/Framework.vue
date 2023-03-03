@@ -15,7 +15,20 @@
     </div>
   </div>
   <div class="container-body">
-    <router-view />
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component
+          :is="Component"
+          :key="route.name"
+          v-if="route.meta.keepAlive"
+        />
+      </keep-alive>
+      <component
+        :is="Component"
+        :key="route.name"
+        v-if="!route.meta.keepAlive"
+      />
+    </router-view>
   </div>
   <div class="container-footer">
     <p>
@@ -31,7 +44,7 @@
 
 <script setup lang="ts">
 import { SystemSettings } from '@/types/DataInterfaces'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import {
   ComponentInternalInstance,
   getCurrentInstance,
@@ -41,6 +54,7 @@ import {
 } from 'vue'
 
 const { proxy } = <ComponentInternalInstance>getCurrentInstance()
+const route = useRoute()
 const router = useRouter()
 const systemInfo = reactive<SystemSettings>(<SystemSettings>{})
 const api = {

@@ -5,7 +5,7 @@
     </div>
     <div class="info">
       <h4 class="nickName">
-        <router-link to="/">{{ nickName }}</router-link>
+        <router-link :to="'/users/#' + userId">{{ nickName }}</router-link>
       </h4>
       <p>{{ profession }}</p>
     </div>
@@ -18,6 +18,7 @@
 import { getCurrentInstance, ComponentInternalInstance } from 'vue'
 const { proxy } = <ComponentInternalInstance>getCurrentInstance()
 const props = defineProps({
+  userId: Number,
   avatar: {
     type: String,
     required: true

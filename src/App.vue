@@ -3,6 +3,7 @@
     <router-view />
   </el-config-provider>
 </template>
+
 <script setup>
 import { reactive } from 'vue'
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'

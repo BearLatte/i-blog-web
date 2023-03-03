@@ -18,6 +18,8 @@ export interface SystemSettings {
 export interface BlogObj {
   // 唯一标识
   id: number
+  // 用户id
+  userId: number
   // 标签
   tag: string
   // 博客标题
@@ -28,6 +30,10 @@ export interface BlogObj {
   content: string
   // 创建时间
   createdAt: string
+  // 更新时间
+  updatedAt: string
+  // 分类id
+  categoryId: number
   // 分类名称
   categoryName: string
   // 作者昵称
@@ -38,6 +44,10 @@ export interface BlogObj {
   sourceTypeName: string
   // 博客简介
   summary: string
+  // 父博客id
+  pBlogId: number
+  // 子博客
+  children: BlogObj[]
 }
 
 // 博客分类接口
@@ -50,6 +60,7 @@ export interface CategoryObj {
   categoryDesc: string
   categoryType: number
   blogCount: number
+  blogs: BlogObj[]
 }
 
 // 用户接口

@@ -5,31 +5,68 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'framework',
+
     component: () => import('@/Framework.vue'),
     children: [
       {
         path: '/',
         name: 'blog',
-        meta: { title: '博客', activePath: '/' },
-        component: () => import('@/views/index.vue')
+        meta: {
+          title: '博客',
+          activePath: '/',
+          keepAlive: true,
+          cacheList: ['blogList']
+        },
+        component: () => import('@/views/Blog.vue')
+      },
+      {
+        path: '/blog/:blogId',
+        name: 'blogDetail',
+        meta: { title: '博客详情', activePath: '/', keepAlive: false },
+        component: () => import('@/views/BlogDetail.vue')
       },
       {
         path: '/categories',
         name: 'categories',
-        meta: { title: '博客分类', activePath: '/categories' },
-        component: () => import('@/views/category.vue')
+        meta: {
+          title: '博客分类',
+          activePath: '/categories',
+          keepAlive: false
+        },
+        component: () => import('@/views/Category.vue')
+      },
+      {
+        path: '/categories/:categoryId:',
+        name: 'categoryDetail',
+        meta: {
+          title: '分类详情',
+          activePath: '/categories',
+          keepAlive: false
+        },
+        component: () => import('@/views/CategoryDetail.vue')
       },
       {
         path: '/specials',
         name: 'special',
-        meta: { title: '专题', activePath: '/specials' },
-        component: () => import('@/views/special.vue')
+        meta: {
+          title: '专题',
+          activePath: '/specials',
+          keepAlive: true,
+          cacheList: ['specialList']
+        },
+        component: () => import('@/views/Special.vue')
+      },
+      {
+        path: '/specials/:specialId',
+        name: 'specialDetial',
+        meta: { title: '专题详情', activePath: '/specials', keepAlive: false },
+        component: () => import('@/views/SpecialDetail.vue')
       },
       {
         path: '/users',
         name: 'index',
-        meta: { title: '成员', activePath: '/users' },
-        component: () => import('@/views/users.vue')
+        meta: { title: '成员', activePath: '/users', keepAlive: false },
+        component: () => import('@/views/Users.vue')
       }
     ]
   }
@@ -41,7 +78,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title + '--' + '学习是一种信仰，写作是一种享受'
+  document.title = to.meta.title + '--' + '学习是一种信仰'
   next()
 })
 
