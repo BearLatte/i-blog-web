@@ -205,6 +205,7 @@ const rightPanelRightPosition = ref((window.innerWidth - 1350) / 2)
       }
       :deep(pre) {
         position: relative;
+        margin: 20px;
         white-space: pre-wrap;
         padding: 40px 10px 10px;
         background-color: @thme-code-bg-color;
@@ -217,6 +218,7 @@ const rightPanelRightPosition = ref((window.innerWidth - 1350) / 2)
         background-color: #192133;
         color: #aaa;
         font-weight: 400;
+        line-height: 20px;
       }
       :deep(code) {
         background-color: #6952b6;
