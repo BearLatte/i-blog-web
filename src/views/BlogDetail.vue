@@ -100,11 +100,11 @@ const getBlogDetail = async () => {
   nextTick(() => {
     const blocks = document.querySelectorAll('pre code')
     blocks.forEach((block) => hljs.highlightElement(block as HTMLElement))
-    createToc()
     // 判断是否有滚动条
     // const hasScrollBar = document.body.scrollHeight > window.innerHeight
     // const scrollBarWidth = hasScrollBar ? 4 : 0
     proxy?.$func.triggerResize()
+    createToc()
   })
 }
 
@@ -149,6 +149,7 @@ const createToc = () => {
     })
   })
 }
+createToc()
 
 onMounted(() => {
   // window添加resize时间，重新计算右边面板距离右边的位置

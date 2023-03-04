@@ -41,7 +41,7 @@
         显示目录
       </el-button>
       <transition>
-        <div class="toc-list" v-show="isShowToc" id="toc-parent">
+        <div class="toc-list" v-show="isShowToc">
           <div class="part-title">
             <span>目录结构</span>
           </div>
