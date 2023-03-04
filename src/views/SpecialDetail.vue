@@ -238,6 +238,7 @@ onBeforeUnmount(() => {
     flex: 1;
     // position: relative;
     border-left: 1px solid @theme-border-color;
+    width: 1050px;
     .content {
       line-height: 40px;
       padding: 20px 20px;
@@ -264,13 +265,16 @@ onBeforeUnmount(() => {
         background-color: @thme-code-bg-color;
         border-radius: 5px;
         border: 1px solid #324560;
+        max-width: 100%;
       }
 
       :deep(pre > code) {
         word-wrap: break-word;
         background-color: #192133;
         color: #aaa;
-        font-weight: 400;
+        font-weight: 700;
+        line-height: 20px;
+        max-width: 100%;
       }
       :deep(code) {
         background-color: #6952b6;

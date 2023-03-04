@@ -101,7 +101,6 @@ const getBlogDetail = async () => {
     const blocks = document.querySelectorAll('pre code')
     blocks.forEach((block) => hljs.highlightElement(block as HTMLElement))
     createToc()
-
     // 判断是否有滚动条
     // const hasScrollBar = document.body.scrollHeight > window.innerHeight
     // const scrollBarWidth = hasScrollBar ? 4 : 0
@@ -150,12 +149,10 @@ const createToc = () => {
     })
   })
 }
-createToc()
 
 onMounted(() => {
   // window添加resize时间，重新计算右边面板距离右边的位置
   window.addEventListener('resize', () => {
-    console.log('方法是否调用')
     // 判断是否有滚动条
     const hasScrollBar = document.body.scrollHeight > window.innerHeight
     scrollBarWidth.value = hasScrollBar ? 4 : 0
@@ -272,7 +269,6 @@ const rightPanelRightPosition = ref((window.innerWidth - 1350) / 2)
         text-align: left;
         margin: 25px 0;
         margin-bottom: 30px;
-        // border-top: 20px solid #f0b752;
       }
 
       :deep(table::before) {
